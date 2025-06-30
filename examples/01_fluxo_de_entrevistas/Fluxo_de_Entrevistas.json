@@ -1,0 +1,1588 @@
+{
+  "name": "Fluxo de Entrevistas",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "**Trigger** = gatilho",
+        "height": 80,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -20,
+        -120
+      ],
+      "typeVersion": 1,
+      "id": "bebc7aa6-2868-4191-a873-efd66bc0fcb5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "**Node** = nó de ação",
+        "height": 80,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -20,
+        200
+      ],
+      "typeVersion": 1,
+      "id": "f9d296e2-22c8-4979-82d4-b503fb670b07",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "formTitle": "Formulário de Candidatura | ALN Corporation™",
+        "formDescription": "Preencha o formulário abaixo para se candidatar a uma vaga na ALN Corporation. Entraremos em contato após a análise do seu perfil.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome Completo",
+              "placeholder": "Informe seu nome completo",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email",
+              "placeholder": "Informe seu e-mail",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Função",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Analista de Qualidade (QA/Testes Automatizados)"
+                  },
+                  {
+                    "option": "Analista de Segurança da Informação"
+                  },
+                  {
+                    "option": "Analista de Suporte Técnico"
+                  },
+                  {
+                    "option": "Arquiteto(a) de Software"
+                  },
+                  {
+                    "option": "Consultor(a) Técnico em Transformação Digital"
+                  },
+                  {
+                    "option": "Desenvolvedor(a) Back-end"
+                  },
+                  {
+                    "option": "Desenvolvedor(a) Front-end"
+                  },
+                  {
+                    "option": "Engenheiro(a) de Dados"
+                  },
+                  {
+                    "option": "Engenheiro(a) de Software Sênior"
+                  },
+                  {
+                    "option": "Especialista em DevOps / CI-CD"
+                  },
+                  {
+                    "option": "Especialista em Modernização de Sistemas"
+                  },
+                  {
+                    "option": "Gerente de Projetos de TI"
+                  },
+                  {
+                    "option": "Product Owner (PO)"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Pretensão Salarial",
+              "fieldType": "number",
+              "placeholder": "Informe o valor em R$",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "014155c3-5997-4e63-b7a0-595935067ba8",
+      "name": "Quando receber candidatura",
+      "webhookId": "0734fc70-632e-47b2-85b1-2fec29e52426"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Retorno sobre sua candidatura",
+        "emailType": "text",
+        "message": "=Olá, {{ $json['Nome Completo'] }},\n\nAgradecemos muito pelo seu interesse e por ter se candidatado à vaga na ALN Corporation™.\n\nApós análise, verificamos que sua pretensão salarial não está alinhada com o orçamento previsto para esta posição.\n\nDesejamos sucesso em suas futuras oportunidades e agradecemos novamente pela sua candidatura.\n\nAtenciosamente,\nEquipe ALN Corporation™\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        -100
+      ],
+      "id": "8535f1db-c18c-45d5-a247-6efbbb7a6f06",
+      "name": "Salario Alto Email",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "61384c83-a11e-45de-978d-3b973ed5053d",
+              "leftValue": "={{ $json['Pretensão Salarial'] }}",
+              "rightValue": 5000,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "1a8d80c5-f963-4c8d-9706-6edb8ecb1be7",
+      "name": "Verifica salario"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE",
+          "mode": "list",
+          "cachedResultName": "candidatos-aln-corporation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "01",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ $json['Nome Completo'] }}",
+            "E-mail": "={{ $json.Email }}",
+            "Cargo": "={{ $json['Função'] }}",
+            "Pretensão": "={{ $json['Pretensão Salarial'] }}",
+            "Data do Cadastro": "={{ $now.format('dd/MM/yyyy') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cargo",
+              "displayName": "Cargo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pretensão",
+              "displayName": "Pretensão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data do Cadastro",
+              "displayName": "Data do Cadastro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Entrevista",
+              "displayName": "Entrevista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        440,
+        100
+      ],
+      "id": "ba09cde0-01ab-45c4-8283-34fe5aed1c1a",
+      "name": "Cadastrar Usuario",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "F9kgIwwYAMtXGVzI",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Analista de Qualidade (QA/Testes Automatizados)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0260ba57-a3a6-470f-8c11-47d0ae811c68"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "analistaQualidade"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2f0e5c63-c4dd-4fc4-b405-ce50244242f8",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Analista de Segurança da Informação",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "analistaSeguranca"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "10ff985f-1521-4425-94e5-b74f77a0bc1c",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Analista de Suporte Técnico",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "analistaSuporte"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "cfb87f95-8406-49f3-aa32-ba293857c63e",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Arquiteto(a) de Software",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "arquitetoSoftware"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "567da981-4756-4c87-a1a2-87f65a57b21e",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Consultor(a) Técnico em Transformação Digital",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "consultorTransformacao"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6f78ea2c-1f3d-48a0-94ae-26c1c9ccb086",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Desenvolvedor(a) Back-end",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "desenvolvedorBackend"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4d5c5315-6987-427a-a936-4251f4abea4b",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Desenvolvedor(a) Front-end",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "desenvolvedorFrontend"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "096ac6af-f595-46e6-863e-d6d5c24e074d",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Engenheiro(a) de Dados",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "engenheiroDados"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e1fa57e6-bf9b-485c-b044-1f5839c693b0",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Engenheiro(a) de Software Sênior",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "engenheiroSoftwareSenior"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "693113bb-4140-4c93-bf4d-764919db862a",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Especialista em DevOps / CI-CD",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "especialistaDevOps"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fd10241f-3061-4025-9544-fd2b1b961432",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Especialista em Modernização de Sistemas",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "especialistaModernizacao"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "01ddc986-0225-4ed7-9a10-28ecb6eff7f0",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Gerente de Projetos de TI",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "gerenteProjetosTI"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7292545c-8521-4c85-9d95-643af3e8a30b",
+                    "leftValue": "={{ $json.Cargo }}",
+                    "rightValue": "Product Owner (PO)",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "productOwner"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        660,
+        100
+      ],
+      "id": "db137c4a-448e-46eb-9c1f-b619a02b082a",
+      "name": "Verifica Cargo"
+    },
+    {
+      "parameters": {
+        "content": "## ALN Corporation™\n\n**Tecnologia da Informação** — Modernização de sistemas, desenvolvimento de software, automações e consultoria em TI.\n\n**Missão:** Oferecer soluções tecnológicas inovadoras que atendam às demandas digitais de empresas e profissionais modernos.\n\n**Visão:** Ser referência nacional em automações inteligentes e desenvolvimento ágil.\n\n**Valores:** Inovação, Transparência, Eficiência e Foco no Cliente.",
+        "height": 400,
+        "width": 260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        -120
+      ],
+      "typeVersion": 1,
+      "id": "69da4faf-a66a-4648-b5e4-718d35ffb6c8",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Fluxo de Entrevistas",
+        "height": 80,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        180,
+        -300
+      ],
+      "typeVersion": 1,
+      "id": "e15970c9-24ca-4dc8-9338-5b3873a46eaf",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nAqui utilizamos ferramentas como Apache Kafka, Spark, SQL, e Python para pipeline de dados. É importante dominar modelagem, ETL e análise de dados.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        380
+      ],
+      "id": "01c296bc-a1b6-4bf2-9dd9-a384943bc560",
+      "name": "Email para engenheiroDados",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nAqui na ALN Corporation™, trabalhamos com ferramentas como JUnit, Cypress e Postman. Recomendamos que revise conceitos de testes automatizados, TDD e integração contínua.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        -60
+      ],
+      "id": "182be65d-80df-4dcc-ac1a-7fcb0b72e36a",
+      "name": "Email para analistaQualidade",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nTrabalhamos com ferramentas como OWASP ZAP, Wazuh e práticas de segurança baseadas na ISO/IEC 27001. É importante revisar conceitos de segurança ofensiva, defensiva e LGPD.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        100
+      ],
+      "id": "22cdd0f9-29d9-4bbc-ad68-f23b692b1f14",
+      "name": "Email para analistaSeguranca",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nUtilizamos sistemas de ticket como GLPI e automações para suporte remoto. Estude boas práticas de atendimento, ITIL e ferramentas como AnyDesk e Shell Script.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        280
+      ],
+      "id": "d48b7e4b-68dd-44f0-81ec-734c965f2017",
+      "name": "Email para analistaSuporte",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nUtilizamos plataformas como n8n, Zapier, e ferramentas de análise de processos. Familiarize-se com automação de fluxos, APIs REST e análise de requisitos.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        640
+      ],
+      "id": "663aced6-52b8-477c-9369-972eeee04df2",
+      "name": "Email para consultorTransformacao",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nTrabalhamos majoritariamente com Java (Spring Boot), Node.js e bancos relacionais e NoSQL. Recomendamos revisar APIs REST, autenticação JWT e boas práticas de código limpo.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        -20
+      ],
+      "id": "89c9c3cf-16dd-401f-99db-5adc655cab9f",
+      "name": "Email para desenvolvedorBackend",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nNossos projetos utilizam arquiteturas baseadas em microsserviços, Spring Boot, Docker e mensageria (RabbitMQ/Kafka). Sugerimos revisar padrões de arquitetura e integração contínua.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        920,
+        460
+      ],
+      "id": "0cb614be-616a-4c96-8322-7e844f510032",
+      "name": "Email para arquitetoSoftware",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nUsamos HTML, CSS, JavaScript, Svelte e React. Reforce seus conhecimentos em responsividade, acessibilidade e consumo de APIs.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        180
+      ],
+      "id": "679a9c37-39c9-4c83-8052-1fa27f224726",
+      "name": "Email para desenvolvedorFrontend",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nAtuamos com sistemas distribuídos, arquitetura limpa, Java 21, testes e CI/CD. Esperamos domínio em boas práticas, refatoração e liderança técnica.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1140,
+        580
+      ],
+      "id": "9c6d01e0-e4e4-488c-af3e-1b57554eb92c",
+      "name": "Email para engenheiroSoftwareSenior",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nNossas stacks incluem Docker, GitHub Actions, Jenkins e Kubernetes. Recomendamos estudar pipelines, infraestrutura como código e observabilidade.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        100
+      ],
+      "id": "86eeb12d-0a15-4ed8-aff1-65e5ef1d2d53",
+      "name": "Email para especialistaDevOps",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nNosso foco é atualizar aplicações Java 8 para Java 21, além de modernizar stacks front-end e back-end. É essencial ter experiência com refatoração e migração de dependências.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        280
+      ],
+      "id": "867e348c-b1aa-439e-89e1-dfcfee4d3bd9",
+      "name": "Email para especialistaModernizacao",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nTrabalhamos com metodologias ágeis (Scrum/Kanban), ferramentas como Jira e controle de versionamento com Git. Estude práticas de gestão ágil e métricas de produtividade.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1360,
+        460
+      ],
+      "id": "fb39cc8f-375d-4dac-aa13-69b9be8150f4",
+      "name": "Email para gerenteProjetosTI",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json['E-mail'] }}",
+        "subject": "=Atualização sobre sua candidatura para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá, {{ $json.Nome }},\n\nAgradecemos sinceramente seu interesse e a candidatura para a vaga de {{ $json.Cargo }} na ALN Corporation™.\n\nInformamos que seu perfil está em análise e entraremos em contato em breve com as próximas etapas do processo seletivo.\n\nUtilizamos Scrum como principal metodologia e ferramentas como Trello, Jira e Miro. É essencial conhecer escrita de user stories, backlog grooming e priorização de entregas.\n\nAtenciosamente,\nEquipe ALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        280
+      ],
+      "id": "f4f12eb4-8ff5-41bd-abfb-ee285076734a",
+      "name": "Email para productOwner",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        260
+      ],
+      "id": "2d9c7361-671a-44b1-afd3-0140a620d84d",
+      "name": "Uniao de fluxo"
+    },
+    {
+      "parameters": {
+        "sendTo": "=alanryan619@gmail.com",
+        "subject": "=Novo candidato para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }}",
+        "emailType": "text",
+        "message": "=Olá,\n\nUm novo candidato se inscreveu para a vaga de {{ $('Quando receber candidatura').item.json['Função'] }} e os dados foram adicionados à planilha de controle.\n\nPedimos, por gentileza, que analise o perfil e informe se deseja dar continuidade para a próxima etapa do processo seletivo.\n\nAtenciosamente,\nEquipe de Recrutamento\nALN Corporation™",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2160,
+        260
+      ],
+      "id": "735f1320-e34e-4a50-9f95-d18b73c0c4b6",
+      "name": "Email Gestor da Vaga",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f02254a6-dbc6-4662-b7fb-18e634f2afb6",
+              "leftValue": "={{ $('Cadastrar Usuario').item.json['Pretensão'] }}",
+              "rightValue": 4000,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1140,
+        -240
+      ],
+      "id": "5323722d-5d20-461f-9994-0021461a21bd",
+      "name": "Filtro de Salario"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "alanryan619@gmail.com",
+          "mode": "list",
+          "cachedResultName": "alanryan619@gmail.com"
+        },
+        "start": "={{ $now.plus(1, 'day') }}",
+        "end": "={{ $now.plus(1, 'day').plus(1, 'hour') }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $('Quando receber candidatura').item.json.Email }}"
+          ],
+          "summary": "=Entrevista — ALN Corporation™ | {{ $('Quando receber candidatura').item.json['Função'] }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        -240
+      ],
+      "id": "ca319820-5e48-4ac9-8ae3-17751a547eeb",
+      "name": "Agendar Entrevista",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "xfE99d3Zpcq514tK",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE",
+          "mode": "list",
+          "cachedResultName": "candidatos-aln-corporation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "01",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/177tchsOnQVlzoryhistvdsCupWnTP2o-pIWlWAulFKE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "E-mail": "={{ $('Quando receber candidatura').item.json.Email }}",
+            "Entrevista": "={{ $json.htmlLink }}"
+          },
+          "matchingColumns": [
+            "E-mail"
+          ],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cargo",
+              "displayName": "Cargo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pretensão",
+              "displayName": "Pretensão",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Data do Cadastro",
+              "displayName": "Data do Cadastro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Entrevista",
+              "displayName": "Entrevista",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1580,
+        -240
+      ],
+      "id": "3edcb8c6-1e41-4459-90ad-28356c18f67d",
+      "name": "Colocar link Entrevista",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "F9kgIwwYAMtXGVzI",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "=alanryan619@gmail.com",
+        "subject": "=Entrevista — ALN Corporation™ | {{ $('Quando receber candidatura').item.json['Função'] }} | {{ $('Quando receber candidatura').item.json['Nome Completo'] }}",
+        "message": "=<!DOCTYPE html>\n<html lang=\"pt-BR\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <style>\n      :root {\n        color-scheme: light dark;\n      }\n\n      body {\n        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n        background: linear-gradient(135deg, #f0f4f8, #d9e2ec);\n        padding: 20px;\n        color: #1a1a1a;\n      }\n\n      .container {\n        background: linear-gradient(to bottom right, #ffffff, #f2f2f2);\n        border-radius: 12px;\n        padding: 32px;\n        max-width: 600px;\n        margin: auto;\n        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);\n      }\n\n      h2 {\n        color: #003366;\n        margin-bottom: 24px;\n        font-size: 24px;\n      }\n\n      p {\n        line-height: 1.6;\n        margin: 16px 0;\n      }\n\n      .info {\n        margin: 16px 0;\n        line-height: 1.6;\n      }\n\n      .info strong {\n        display: inline-block;\n        margin-bottom: 4px;\n      }\n\n      .button-container {\n        margin-top: 24px;\n        text-align: center;\n      }\n\n      .join-button {\n        display: inline-block;\n        background-color: #0056b3;\n        color: #ffffff !important;\n        padding: 12px 24px;\n        border-radius: 6px;\n        text-decoration: none;\n        font-weight: bold;\n        transition: background-color 0.3s ease;\n        border: none;\n        appearance: none;\n        -webkit-appearance: none;\n        -moz-appearance: none;\n      }\n\n      .join-button:hover {\n        background-color: #004494;\n      }\n\n      .alternative-link {\n        font-size: 13px;\n        color: #666;\n        text-align: center;\n        margin-top: 12px;\n      }\n\n      .alternative-link a {\n        color: #0056b3;\n        word-break: break-all;\n      }\n\n      .signature {\n        margin-top: 40px;\n        line-height: 1.6;\n        font-size: 14px;\n        color: #444;\n      }\n\n      @media (prefers-color-scheme: dark) {\n        body {\n          background: linear-gradient(135deg, #1e1e1e, #2c2c2c);\n          color: #f0f0f0;\n        }\n\n        .container {\n          background: #2a2a2a;\n          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);\n        }\n\n        .join-button {\n          background-color: #3399ff;\n          color: #000000 !important;\n        }\n\n        .join-button:hover {\n          background-color: #2b8de0;\n        }\n\n        .signature {\n          color: #ccc;\n        }\n\n        .alternative-link {\n          color: #bbb;\n        }\n\n        .alternative-link a {\n          color: #66b0ff;\n        }\n      }\n    </style>\n  </head>\n  <body>\n    <div class=\"container\">\n      <h2>Confirmação de Entrevista</h2>\n\n      <p>Olá,</p>\n\n      <p>\n        Confirmamos que a entrevista está agendada para\n        <strong>{{ $('Quando receber candidatura').item.json['Nome Completo'] }}</strong>.\n      </p>\n\n      <div class=\"info\">\n        📅 <strong>Data e horário:</strong><br />\n        {{ $('Agendar Entrevista').item.json.start.dateTime }}\n      </div>\n\n      <div class=\"button-container\">\n        <a href=\"{{ $('Agendar Entrevista').item.json.htmlLink }}\" target=\"_blank\" class=\"join-button\">\n          Acessar Reunião\n        </a>\n\n        <div class=\"alternative-link\">\n          <em>Se preferir, copie ou acesse diretamente:<br />\n            <a href=\"{{ $('Agendar Entrevista').item.json.htmlLink }}\" target=\"_blank\">\n              {{ $('Agendar Entrevista').item.json.htmlLink }}\n            </a>\n          </em>\n        </div>\n      </div>\n\n      <p class=\"info\">\n        Pedimos que todos os participantes estejam disponíveis no horário agendado\n        e acessem a reunião através do botão acima ou pelo link alternativo.\n      </p>\n\n      <div class=\"signature\">\n        Atenciosamente,<br />\n        Equipe de Recrutamento<br />\n        <strong>ALN Corporation™</strong>\n      </div>\n    </div>\n  </body>\n</html>\n",
+        "options": {
+          "appendAttribution": false,
+          "ccList": "={{ $('Quando receber candidatura').item.json.Email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1800,
+        -240
+      ],
+      "id": "f786c9b2-70b7-481d-adae-880476c9a6a1",
+      "name": "Email Entrevista",
+      "webhookId": "bf7d0cfd-bfeb-43c3-9e57-8638d45ff994",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "JrlRRjB4bT5Y4e4Q",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Quando receber candidatura": [
+      {
+        "json": {
+          "Nome Completo": "Aerith Gainsborough",
+          "Email": "earisugeinzuburu619@gmail.com",
+          "Função": "Analista de Segurança da Informação",
+          "Pretensão Salarial": 3000,
+          "submittedAt": "2025-06-30T13:08:08.725-03:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Quando receber candidatura": {
+      "main": [
+        [
+          {
+            "node": "Verifica salario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica salario": {
+      "main": [
+        [
+          {
+            "node": "Salario Alto Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cadastrar Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cadastrar Usuario": {
+      "main": [
+        [
+          {
+            "node": "Verifica Cargo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verifica Cargo": {
+      "main": [
+        [
+          {
+            "node": "Email para analistaQualidade",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para analistaSeguranca",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para analistaSuporte",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para arquitetoSoftware",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para consultorTransformacao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para desenvolvedorBackend",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para desenvolvedorFrontend",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para engenheiroDados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para engenheiroSoftwareSenior",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para especialistaDevOps",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para especialistaModernizacao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para gerenteProjetosTI",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email para productOwner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para productOwner": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para gerenteProjetosTI": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para especialistaDevOps": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para especialistaModernizacao": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para engenheiroSoftwareSenior": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para engenheiroDados": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para desenvolvedorFrontend": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para desenvolvedorBackend": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para analistaQualidade": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para analistaSeguranca": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filtro de Salario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para analistaSuporte": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para consultorTransformacao": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email para arquitetoSoftware": {
+      "main": [
+        [
+          {
+            "node": "Uniao de fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uniao de fluxo": {
+      "main": [
+        [
+          {
+            "node": "Email Gestor da Vaga",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de Salario": {
+      "main": [
+        [
+          {
+            "node": "Agendar Entrevista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agendar Entrevista": {
+      "main": [
+        [
+          {
+            "node": "Colocar link Entrevista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocar link Entrevista": {
+      "main": [
+        [
+          {
+            "node": "Email Entrevista",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Entrevista": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "777efe49-0f26-416b-a417-232a3a1b9405",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51ae5f1d2eac0da861b9f3a5a948b86335c9d90b633fc91ccb076d1e714c2756"
+  },
+  "id": "Mlehv89PGNzQuz2E",
+  "tags": [
+    {
+      "name": "fluxo",
+      "id": "7l9QFkr0byk7KIIz",
+      "createdAt": "2025-06-30T15:39:07.714Z",
+      "updatedAt": "2025-06-30T15:39:07.714Z"
+    }
+  ]
+}
