@@ -32,3 +32,29 @@ Evitar tarefas manuais repetitivas, organizar o processo seletivo de forma escal
 ### 📸 Ilustração do Fluxo
 
 ![Print do fluxo de entrevistas](examples/01_fluxo_de_entrevistas/fluxo-de-entrevistas.png)
+
+---
+
+## 🚀 Segundo projeto: Gerador de Contratos
+
+Este fluxo tem como objetivo automatizar a criação, personalização e envio de contratos digitais para clientes, utilizando integrações com Google Drive e Gmail. Ele é ideal para empresas modernas que desejam agilizar seu processo contratual com segurança e confiabilidade.
+
+### 🔧 Funcionalidades principais:
+
+- Recebimento de informações de um formulário online.
+- Localização e obtenção do documento modelo no Google Docs.
+- Criação de uma cópia personalizada do modelo para o cliente.
+- Atualização dinâmica dos dados no documento copiado.
+- Compartilhamento do arquivo gerado via Google Drive.
+- Verificação condicional para decidir se uma mensagem de notificação será enviada.
+- Envio do contrato para o cliente via e-mail.
+
+### 🎯 Objetivo
+
+Eliminar tarefas manuais na geração de contratos, aumentar a eficiência e reduzir erros no processo de gestão contratual, unindo inovação tecnológica com agilidade e segurança.
+
+### 📸 Ilustração do Fluxo
+
+![Print do gerador de contratos](examples/02_gerador_de_contratos/gerador-de-contratos.png)
+
+---

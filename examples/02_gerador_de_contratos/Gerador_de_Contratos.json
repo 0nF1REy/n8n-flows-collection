@@ -1,0 +1,468 @@
+{
+  "name": "Gerador de Contratos",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Formulário de Contrato – KabukiTech Agreement Systems",
+        "formDescription": "Por favor, preencha todos os campos com atenção, fornecendo informações corretas e completas para que a KabukiTech Agreement Systems possa elaborar seu contrato com precisão e formalizar o acordo entre as partes envolvidas. Campos obrigatórios estão indicados com *.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome do Cliente",
+              "placeholder": "Digite o nome do cliente",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "CPF CNPJ do Cliente",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Quais objetos do contrato",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Automação com IA"
+                  },
+                  {
+                    "option": "Desenvolvimento de Aplicativos (Android e iOS)"
+                  },
+                  {
+                    "option": "Desenvolvimento de Site"
+                  },
+                  {
+                    "option": "Automação ChatBot"
+                  }
+                ]
+              },
+              "multiselect": true,
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Descrição do Serviço",
+              "fieldType": "textarea",
+              "placeholder": "Descreva sobre o serviço que será realizado"
+            },
+            {
+              "fieldLabel": "Endereço cliente",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Forma de pagamento",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "PIX"
+                  },
+                  {
+                    "option": "Transferência bancária"
+                  },
+                  {
+                    "option": "Cartão de crédito"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Valor do serviço",
+              "fieldType": "number",
+              "placeholder": "Valor do serviço",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Cidade",
+              "placeholder": "Nome da cidade do cliente",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Estado",
+              "placeholder": "Nome do estado do cliente",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Data inicio",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Duração do projeto em dias",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email do cliente",
+              "placeholder": "Digite o email do cliente",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "639f107b-95ae-4570-abd4-722b1311d965",
+      "name": "On form submission",
+      "webhookId": "a85e4cbd-b70c-4f29-aa55-a499811fbbaf"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "https://docs.google.com/document/d/11oNAfjfpRfhz7crzenmKMhgZGGtij1KR196G52py7nw/edit?usp=sharing"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "97a3199c-ae90-4e4c-8f85-ea6adaca685c",
+      "name": "Get a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "w6VdVnmyyKi0Xcss",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "11oNAfjfpRfhz7crzenmKMhgZGGtij1KR196G52py7nw",
+          "mode": "list",
+          "cachedResultName": "service-agreement",
+          "cachedResultUrl": "https://docs.google.com/document/d/11oNAfjfpRfhz7crzenmKMhgZGGtij1KR196G52py7nw/edit?usp=drivesdk"
+        },
+        "name": "=Contrato - {{ $('On form submission').item.json['Nome do Cliente'] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        440,
+        0
+      ],
+      "id": "059fbc2b-3939-42b9-8e64-18c54c4cf2d0",
+      "name": "Copy file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "knxDYeBSbxm7ZJOE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{{nome_cliente}}",
+              "replaceText": "={{ $('On form submission').item.json['Nome do Cliente'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{cpf_cnpj}}",
+              "replaceText": "={{ $('On form submission').item.json['CPF CNPJ do Cliente'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{endereco_cliente}}",
+              "replaceText": "={{ $('On form submission').item.json['Endereço cliente'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{descricao_servicos}}",
+              "replaceText": "={{ $('On form submission').item.json['Descrição do Serviço'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{servicos}}",
+              "replaceText": "={{ $('On form submission').item.json['Quais objetos do contrato'].map(item => `${item}`).join('\\n') }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{data_inicio}}",
+              "replaceText": "={{ new Date($('On form submission').item.json['Data inicio']).toLocaleDateString(\"pt-BR\") }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{dias}}",
+              "replaceText": "={{ $('On form submission').item.json['Duração do projeto em dias'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{valor_total}}",
+              "replaceText": "={{ String($('On form submission').item.json['Valor do serviço']) }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{forma_pagamento}}",
+              "replaceText": "={{ $('On form submission').item.json['Forma de pagamento'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{cidade}}",
+              "replaceText": "={{ $('On form submission').item.json.Cidade }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{estado}}",
+              "replaceText": "={{ $('On form submission').item.json.Estado }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{{data}}",
+              "replaceText": "={{ new Date($('On form submission').item.json.submittedAt).toLocaleDateString(\"pt-BR\") }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "dcfbf385-589e-4dd1-ac22-3516f03f16d9",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "w6VdVnmyyKi0Xcss",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Gerador de Contratos - KabukiTech Agreement Systems",
+        "height": 80,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        160,
+        -200
+      ],
+      "typeVersion": 1,
+      "id": "8e55f98c-d8f4-4362-9c2e-8941df043c8c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.documentId }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        880,
+        0
+      ],
+      "id": "a6841e1b-d47d-4350-8b4f-b1a33ef9a6f2",
+      "name": "Share file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "knxDYeBSbxm7ZJOE",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "19506cd0-8563-490c-a3ca-02f4f7740d36",
+              "leftValue": "={{ $('On form submission').item.json['Email do cliente'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        0
+      ],
+      "id": "6aab2b00-3954-489a-b017-66e6e20c3cef",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['Email do cliente'] }}",
+        "subject": "=KabukiTech Agreement Systems – Prévia do Contrato de Prestação de Serviço para {{ $('On form submission').item.json['Nome do Cliente'] }}",
+        "message": "=<!DOCTYPE html>\n<html lang=\"pt-BR\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Prévia do Contrato - KabukiTech Agreement Systems</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    color: #333;\n    line-height: 1.6;\n    padding: 20px;\n  }\n  .botao {\n    display: inline-block;\n    background-color: #4CAF50;\n    color: white;\n    text-decoration: none;\n    padding: 10px 20px;\n    border-radius: 4px;\n  }\n</style>\n</head>\n<body>\n  <p>Olá <strong>{{ $('On form submission').item.json['Nome do Cliente'] }}</strong>, tudo bem?</p>\n\n  <p>Estamos enviando o link para que você possa conferir a prévia do seu contrato referente ao serviço contratado junto à <strong>KabukiTech Agreement Systems</strong>.</p>\n\n  <p>Por favor, revise o documento com atenção. Caso tenha alguma dúvida, sugestão de alteração ou ajuste necessário, fique à vontade para responder a este e-mail ou entrar em contato diretamente conosco.</p>\n\n  <p style=\"margin: 30px 0;\">\n    <a href=\"{{ 'https://docs.google.com/document/d/' + $('Update a document').item.json.documentId + '/view' }}\" \n       role=\"button\" aria-label=\"Acessar a prévia do contrato\"\n       style=\"display: inline-block; background-color: #4CAF50; color: white; text-decoration: none; padding: 10px 20px; border-radius: 4px;\">\n      📄 Acessar a Prévia do Contrato\n    </a>\n  </p>\n\n  <p>Atenciosamente,</p>\n  <p><em>Equipe KabukiTech Agreement Systems</em></p>\n</body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1320,
+        -100
+      ],
+      "id": "fadcf627-c33c-430a-a868-7ed33841c735",
+      "name": "Send a message",
+      "webhookId": "1f5e5720-8e3c-41a1-8af1-3a4c59ba191b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5s5S3GeRNo1NOdPP",
+          "name": "Gmail account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "A KabukiTech Agreement Systems oferece soluções tecnológicas para criação e automação de contratos digitais, garantindo eficiência, segurança e conformidade. Unimos inovação e tecnologia para facilitar a gestão contratual de empresas modernas, com agilidade e confiabilidade.",
+        "height": 320,
+        "width": 180
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -280,
+        -200
+      ],
+      "typeVersion": 1,
+      "id": "ae616f36-5e91-4d70-ac34-3ab2e7cc7bb3",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Nome do Cliente": "Aerith Gainsborough",
+          "CPF CNPJ do Cliente": "23232",
+          "Quais objetos do contrato": [
+            "Automação com IA"
+          ],
+          "Descrição do Serviço": "dsadasdasda",
+          "Endereço cliente": "dada",
+          "Forma de pagamento": "PIX",
+          "Valor do serviço": 1232,
+          "Cidade": "Itapeva",
+          "Estado": "SP",
+          "Data inicio": "2025-07-04",
+          "Duração do projeto em dias": "7",
+          "Email do cliente": "earisugeinzuburu619@gmail.com",
+          "submittedAt": "2025-07-04T20:03:54.765-03:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Get a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document": {
+      "main": [
+        [
+          {
+            "node": "Copy file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copy file": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document": {
+      "main": [
+        [
+          {
+            "node": "Share file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Share file": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8d7f891b-2be3-43ae-b2f1-f15afe0c9253",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51ae5f1d2eac0da861b9f3a5a948b86335c9d90b633fc91ccb076d1e714c2756"
+  },
+  "id": "l7jOJHrdYK94I8A7",
+  "tags": []
+}
